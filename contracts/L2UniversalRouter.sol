@@ -27,9 +27,10 @@ contract L2UniversalRouter is RouterImmutables, IUniversalRouter, Dispatcher, Re
         uint256 offset = 1;
         for (uint8 commandIndex; commandIndex < numCommands;) {
             bytes1 command = Calldata.getBytes1(offset);
+
             uint16 length = Calldata.getUint16(1 + offset);
+
             bytes calldata input = Calldata.slice(1 + offset + 2, length);
-            offset += 1 + length + 2;
 
             (success, output) = dispatch(command, input);
 
@@ -38,6 +39,7 @@ contract L2UniversalRouter is RouterImmutables, IUniversalRouter, Dispatcher, Re
             }
 
             unchecked {
+                offset += 1 + length + 2;
                 commandIndex++;
             }
         }
